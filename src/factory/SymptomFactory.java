@@ -1,12 +1,22 @@
 package factory;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import domain.*;
 
 public class SymptomFactory {
     
+    // Cache to store unique symptom instances
+    private static Map<String, Symptom> symptomCache = new HashMap<>();
+    
     public static Symptom createSymptom(String symptomName) {
+        // Check if symptom already exists in cache
+        if (symptomCache.containsKey(symptomName)) {
+            return symptomCache.get(symptomName);
+        }
+        
         List<String> impact5 = Arrays.asList("fiebre", "tos seca", "astenia", "expectoracion");
         List<Double> index5 = Arrays.asList(87.9, 67.7, 38.1, 33.4);
         List<String> impact3 = Arrays.asList("disnea", "dolor de garganta", "cefalea", "mialgia", "escalofrios");
@@ -32,17 +42,23 @@ public class SymptomFactory {
             index = index1.get(impact1.indexOf(symptomName));
         }
         
+        Symptom symptom = null;
+        
         if (impact != 0) {
             if (digestiveSymptom.contains(symptomName)) {
-                return new DigestiveSymptom(symptomName, (int)index, impact);
+                symptom = new DigestiveSymptom(symptomName, (int)index, impact);
+            } else if (neuroMuscularSymptom.contains(symptomName)) {
+                symptom = new NeuroMuscularSymptom(symptomName, (int)index, impact);
+            } else if (respiratorySymptom.contains(symptomName)) {
+                symptom = new RespiratorySymptom(symptomName, (int)index, impact);
             }
-            if (neuroMuscularSymptom.contains(symptomName)) {
-                return new NeuroMuscularSymptom(symptomName, (int)index, impact);
-            }
-            if (respiratorySymptom.contains(symptomName)) {
-                return new RespiratorySymptom(symptomName, (int)index, impact);
+            
+            // Store in cache before returning
+            if (symptom != null) {
+                symptomCache.put(symptomName, symptom);
             }
         }
-        return null;
+        
+        return symptom;
     }
 }
