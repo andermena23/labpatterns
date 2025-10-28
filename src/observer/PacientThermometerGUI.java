@@ -18,8 +18,8 @@ public class PacientThermometerGUI extends Frame implements Observer {
     private Covid19Pacient pacient;
     
     public PacientThermometerGUI(Covid19Pacient pacient){ 
-        this.pacient = pacient;
-        super("Temperature Gauge");
+		super("Temperature Gauge");
+		this.pacient = pacient;
         Panel Top = new Panel();
         add("North", Top);
         gauges = new TemperatureCanvas(0,15);
