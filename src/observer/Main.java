@@ -1,7 +1,5 @@
 package observer;
 
-import java.util.Observable;
-
 import domain.Covid19Pacient;
 
 public class Main {
@@ -10,14 +8,15 @@ public class Main {
         Covid19Pacient pacient = new Covid19Pacient("John", 35);
         
         // Create observers
-        PacientSymptomGUI symptomGUI = new PacientSymptomGUI(pacient);
+        new PacientSymptomGUI(pacient);
         PacientObserverGUI observerGUI = new PacientObserverGUI(pacient);
-        PacientThermometerGUI thermometerGUI = new PacientThermometerGUI(pacient);
+        // Pass the observable (pacient) into the thermometer GUI so it can subscribe itself
+        new PacientThermometerGUI(pacient, pacient);
         SemaphorGUI semaphorGUI = new SemaphorGUI(pacient);
         
         // Register observers
         pacient.addObserver(observerGUI);
-        pacient.addObserver(thermometerGUI);
+        // thermometerGUI registers itself in its constructor, so don't register it here to avoid double subscription
         pacient.addObserver(semaphorGUI);
     }
 }

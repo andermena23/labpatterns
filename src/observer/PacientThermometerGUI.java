@@ -17,7 +17,7 @@ public class PacientThermometerGUI extends Frame implements Observer {
     private final JLabel label = new JLabel("New label");
     private Covid19Pacient pacient;
     
-    public PacientThermometerGUI(Covid19Pacient pacient){ 
+	public PacientThermometerGUI(Observable obs, Covid19Pacient pacient){ 
 		super("Temperature Gauge");
 		this.pacient = pacient;
         Panel Top = new Panel();
@@ -28,11 +28,19 @@ public class PacientThermometerGUI extends Frame implements Observer {
         setSize(200, 380);
         setLocation(0, 100);
         setVisible(true);
+		// Subscribe this GUI to the provided observable
+		if (obs != null) {
+			obs.addObserver(this);
+		}
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        gauges.set((int) pacient.covidImpact());
+		// The observable 'o' is expected to be the Covid19Pacient that changed.
+		if (o instanceof Covid19Pacient) {
+			this.pacient = (Covid19Pacient) o;
+		}
+		gauges.set((int) pacient.covidImpact());
         gauges.repaint();
     }
 
