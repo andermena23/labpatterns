@@ -6,7 +6,7 @@ import javax.swing.JTable;
 
 import domain.Covid19Pacient;
 import domain.Symptom;
-//import adapter2.Covid19PacientTableModelAdapter;
+import adapter2.Covid19PacientTableModelAdapter;
 
 	public class Main {
 
