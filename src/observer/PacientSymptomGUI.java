@@ -24,12 +24,14 @@ public class PacientSymptomGUI extends JFrame {
 	private JLabel errorLabel;
 	private JLabel lblPacient;
 	private JLabel labelPacient;
+	private Covid19Pacient pacient;
 
 	
 	/**
 	 * Create the frame.
 	 */
 	public PacientSymptomGUI(Covid19Pacient p) {
+		this.pacient = p;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(200, 100, 450, 300);
 		contentPane = new JPanel();
@@ -76,18 +78,14 @@ public class PacientSymptomGUI extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				errorLabel.setText(" ");
-				try {
-					int weight = Integer.parseInt(weightField.getText());
-					if (weight <= 3 && weight >= 1) {
-						Symptom selectedSymptom = (Symptom)symptomComboBox.getSelectedItem();
-						p.addSymptom(selectedSymptom, weight);
-						System.out.println("Symptom added :" + selectedSymptom);
-					} else {
-						errorLabel.setText("ERROR, Weight between [1..3]");
-					}
-				} catch (NumberFormatException ex) {
-					errorLabel.setText("ERROR, Invalid weight");
-				}
+				if (new Integer(weightField.getText())<=3) {
+		    	System.out.println("Symptom added :"+(Symptom)symptomComboBox.getSelectedItem());
+
+				pacient.addSymptomByName(((Symptom)symptomComboBox.getSelectedItem()).getName(), 
+					Integer.parseInt(weightField.getText()));
+				
+			} else errorLabel.setText("ERROR, Weight between [1..3]");
+				
 			}
 		});
 		btnNewButton.setBounds(88, 202, 117, 29);
@@ -97,9 +95,11 @@ public class PacientSymptomGUI extends JFrame {
 		btnRemoveSymptom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				errorLabel.setText(" ");
-				Symptom selectedSymptom = (Symptom)symptomComboBox.getSelectedItem();
-				p.removeSymptomByName(selectedSymptom.getName());
-				System.out.println("Symptom removed :" + selectedSymptom);
+
+		    	System.out.println("Symptom removed :"+(Symptom)symptomComboBox.getSelectedItem());
+
+				pacient.removeSymptomByName(((Symptom)symptomComboBox.getSelectedItem()).getName());
+				
 			} 
 		});
 		btnRemoveSymptom.setBounds(255, 202, 147, 29);

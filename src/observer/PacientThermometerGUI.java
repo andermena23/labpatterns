@@ -13,38 +13,37 @@ import domain.Covid19Pacient;
 import javax.swing.JLabel;
 
 public class PacientThermometerGUI extends Frame implements Observer {	
-    private TemperatureCanvas gauges;
-    private final JLabel label = new JLabel("New label");
-    private Covid19Pacient pacient;
-    
-	public PacientThermometerGUI(Observable obs, Covid19Pacient pacient){ 
+	private TemperatureCanvas gauges;
+	/**
+	 * @wbp.nonvisual location=119,71
+	 */
+	private final JLabel label = new JLabel("New label");
+	
+	public PacientThermometerGUI(Observable obs){ 
 		super("Temperature Gauge");
-		this.pacient = pacient;
-        Panel Top = new Panel();
-        add("North", Top);
-        gauges = new TemperatureCanvas(0,15);
-        gauges.setSize(500,280);
-        add("Center", gauges);		
-        setSize(200, 380);
-        setLocation(0, 100);
-        setVisible(true);
-		// Subscribe this GUI to the provided observable
-		if (obs != null) {
-			obs.addObserver(this);
-		}
-    }
+		Panel Top = new Panel();
+		add("North", Top);
+		gauges = new TemperatureCanvas(0,15);
+		gauges.setSize(500,280);
+		add("Center", gauges);		
+		setSize(200, 380);
+		setLocation(0, 100);
+		setVisible(true);
+		obs.addObserver(this);
+	}
 
-    @Override
-    public void update(Observable o, Object arg) {
-		// The observable 'o' is expected to be the Covid19Pacient that changed.
-		if (o instanceof Covid19Pacient) {
-			this.pacient = (Covid19Pacient) o;
-		}
-		gauges.set((int) pacient.covidImpact());
-        gauges.repaint();
-    }
+	@Override
+	public void update(Observable o, Object args) {
+		Covid19Pacient p = (Covid19Pacient) o;
+		// Obtain the current covidImpact to paint
+		int farenheit = (int) p.covidImpact();
+		// temperature gauge update
+		gauges.set(farenheit);
+		gauges.repaint();
+	}
 
-    class TemperatureCanvas extends Canvas {	
+	
+	class TemperatureCanvas extends Canvas {	
 		
 		public void set(int level) { current = level; }	
 		public int get(){return current;}
