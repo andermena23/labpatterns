@@ -14,22 +14,25 @@ public class Covid19PacientTableModelAdapter extends AbstractTableModel {
 	  }
 
 	  public int getColumnCount() {
-	    // Challenge!
-		 return 1;
+	    return columnNames.length;
 	  }
 
 	  public String getColumnName(int i) {
-	    // Challenge!
-		  return "Column name 1";
+	    return columnNames[i];
 	  }
 
 	  public int getRowCount() {
-	    // Challenge!
-		  return 1;
+	    return pacient.getSymptoms().size();
 	  }
 
 	  public Object getValueAt(int row, int col) {
-	    // Challenge!
-		  return "value";
+	    domain.Symptom[] symptoms = pacient.getSymptoms().toArray(new domain.Symptom[0]);
+	    domain.Symptom symptom = symptoms[row];
+	    
+	    if (col == 0) {
+	      return symptom.getName();
+	    } else {
+	      return pacient.getWeight(symptom);
+	    }
 	  }
 	}
